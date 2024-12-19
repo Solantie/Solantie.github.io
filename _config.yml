@@ -12,7 +12,7 @@ title                    : "Ran Li"
 title_separator          : "-"
 name                     : &name "Ran Li"
 description              : &description "personal description"
-url                      : https://academicpages.github.io # the base hostname & protocol for your site e.g. "https://solantie.github.io"
+url                      : https://solantie.github.io/ # the base hostname & protocol for your site e.g. "https://solantie.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "solantie.github.io"
 
@@ -24,7 +24,7 @@ author:
   avatar           : "profile_home1.png"
   name             : "Ran Li"
   pronouns         : "she/her"
-  bio              : "Interpreter/Translator/Applying for PhD"
+  bio              : "Computational Linguistics"
   location         : "Shanghai, China"
   employer         : "Tongji University"
   uri              : # URL
@@ -36,7 +36,7 @@ author:
   impactstory      : # URL
   orcid            : #"http://orcid.org/yourorcidurl"
   semantic         : # URL
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
+  pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   researchgate     : # URL
   scopus           : # URL
 
