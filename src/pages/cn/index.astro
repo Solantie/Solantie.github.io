@@ -1,151 +1,28 @@
 ---
 import "../../styles/global.css";
+import SiteShell from "../../components/SiteShell.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ran Li</title>
-  </head>
+<SiteShell
+  lang="zh-CN"
 
-  <body>
+  aboutLabel="关于我"
+  cvLabel="简历"
+  projectsLabel="项目"
+  researchLabel="研究"
+  skillsLabel="技能"
 
-    <!-- FIXED SIDE NAV -->
-    <aside class="side-nav">
+  showResearch={true}
+  showSkills={true}
 
-      <div class="mini-card">
-        <span>AI</span>
-      </div>
+  heroKicker="计算语言学 · AI"
+  heroTitle="你好，我是李然"
+  heroLine1="语音/AI/LLM"
+  heroLine2="语言、语音与 AI。"
 
-      <div class="network-line">
+  aboutTitle="你好，我是 RAN。"
 
-        <a
-          class="node node-one"
-          href="#about"
-          aria-label="About"
-        ></a>
+  aboutText1="我目前正在攻读计算语言学硕士，主要关注语音处理、自然语言处理和大语言模型。"
 
-        <a
-          class="node node-two"
-          href="#cv"
-          aria-label="CV"
-        ></a>
-
-        <a
-          class="node node-three"
-          href="#projects"
-          aria-label="Projects"
-        ></a>
-
-        <a
-          class="node node-four"
-          href="#research"
-          aria-label="Research"
-        ></a>
-
-        <a
-          class="node node-five"
-          href="#skills"
-          aria-label="Skills"
-        ></a>
-
-      </div>
-
-    </aside>
-
-
-    <!-- PAGE CONTENT -->
-    <div class="page-content">
-
-      <!-- HERO -->
-      <section class="hero">
-
-
-
-        <header class="nav">
-          <div class="nav-logo">RAN.LI</div>
-
-          <nav class="nav-links">
-            <a
-              href="你的 GitHub 链接"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GITHUB ↗
-            </a>
-
-            <a
-              href="你的 LinkedIn 链接"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LINKEDIN ↗
-            </a>
-          </nav>
-        </header>
-
-        <div class="hero-copy">
-          <p class="kicker">
-            COMPUTATIONAL LINGUISTICS · AI
-          </p>
-
-          <h1>
-            HI! I'M RAN.
-          </h1>
-
-          <p class="hero-tagline">
-            I BUILD THINGS WITH
-            <span>
-              LANGUAGE, SPEECH & AI.
-            </span>
-          </p>
-        </div>
-
-      </section>
-
-
-      <!-- ABOUT -->
-      <section id="about" class="about-section">
-        <div class="about-inner">
-
-
-          <h2>
-            About Me
-          </h2>
-
-          <p class="about-text">
-            I'm a Computational Linguistics master's student interested in
-            speech processing, NLP and LLMs. I'm currently working on an NER project
-            aimed at identifying usernames on social media.
-          </p>
-
-          <p class="about-text">
-            I enjoy building systems, testing ideas, and understanding why models
-            work — or why they fail.
-          </p>
-
-        </div>
-      </section>
-
-
-      <section id="cv" class="placeholder-section">
-        <h2>CV</h2>
-      </section>
-
-      <section id="projects" class="placeholder-section">
-        <h2>PROJECTS</h2>
-      </section>
-
-      <section id="research" class="placeholder-section">
-        <h2>RESEARCH</h2>
-      </section>
-
-      <section id="skills" class="placeholder-section">
-        <h2>SKILLS</h2>
-      </section>
-
-    </div>
-
-  </body>
-</html>
+  aboutText2="我喜欢构建系统、测试想法，也喜欢分析模型为什么有效，或者为什么失败。"
+/>
