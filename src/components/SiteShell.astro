@@ -1,0 +1,357 @@
+---
+const {
+  lang = "en",
+
+  aboutLabel,
+  cvLabel,
+  projectsLabel,
+  researchLabel,
+  skillsLabel,
+
+  showResearch = true,
+  showSkills = true,
+
+  heroKicker,
+  heroTitle,
+  heroLine1,
+  heroLine2,
+
+  aboutTitle,
+  aboutText1,
+  aboutText2,
+} = Astro.props;
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Ran Li</title>
+  </head>
+
+  <body>
+
+    <!-- =========================
+         FIXED TOP NAV
+    ========================== -->
+
+    <header class="nav">
+
+      <div class="nav-logo">
+        RAN.LI
+      </div>
+
+      <nav class="nav-links">
+
+        <a href="#about">
+          {aboutLabel}
+        </a>
+
+        <a href="#cv">
+          {cvLabel}
+        </a>
+
+        <a href="#projects">
+          {projectsLabel}
+        </a>
+
+        {showResearch && (
+          <a href="#research">
+            {researchLabel}
+          </a>
+        )}
+
+        {showSkills && (
+          <a href="#skills">
+            {skillsLabel}
+          </a>
+        )}
+
+        <!-- LANGUAGE SWITCHER -->
+
+        <div class="language-switcher">
+
+          <a href="/en/">
+            EN
+          </a>
+
+          <a href="/de/">
+            DE
+          </a>
+
+          <a href="/cn/">
+            中文
+          </a>
+
+        </div>
+
+      </nav>
+
+    </header>
+
+
+    <!-- =========================
+         FIXED SIDE NAV
+    ========================== -->
+
+    <aside class="side-nav">
+
+      <!-- temporary portrait -->
+      <div class="mini-card">
+        <span>AI</span>
+      </div>
+
+
+      <!-- neural navigation -->
+
+      <div class="network-line">
+
+        <!-- ABOUT -->
+
+        <a
+          class="node node-one"
+          href="#about"
+          aria-label={aboutLabel}
+        >
+          <span class="node-label">
+            {aboutLabel}
+          </span>
+        </a>
+
+
+        <!-- CV -->
+
+        <a
+          class="node node-two"
+          href="#cv"
+          aria-label={cvLabel}
+        >
+          <span class="node-label">
+            {cvLabel}
+          </span>
+        </a>
+
+
+        <!-- PROJECTS -->
+
+        <a
+          class="node node-three"
+          href="#projects"
+          aria-label={projectsLabel}
+        >
+          <span class="node-label">
+            {projectsLabel}
+          </span>
+        </a>
+
+
+        <!-- RESEARCH -->
+
+        {showResearch && (
+          <a
+            class="node node-four"
+            href="#research"
+            aria-label={researchLabel}
+          >
+            <span class="node-label">
+              {researchLabel}
+            </span>
+          </a>
+        )}
+
+
+        <!-- SKILLS -->
+
+        {showSkills && (
+          <a
+            class="node node-five"
+            href="#skills"
+            aria-label={skillsLabel}
+          >
+            <span class="node-label">
+              {skillsLabel}
+            </span>
+          </a>
+        )}
+
+      </div>
+
+    </aside>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <main class="page-content">
+
+      <section class="hero">
+
+        <div class="hero-copy">
+
+          <p class="kicker">
+            {heroKicker}
+          </p>
+
+          <h1>
+            {heroTitle}
+          </h1>
+
+          <p class="hero-tagline">
+            {heroLine1}
+
+            <span>
+              {heroLine2}
+            </span>
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           ABOUT
+      ========================== -->
+
+      <section
+        id="about"
+        class="about-section"
+      >
+
+        <div class="about-inner">
+
+          <p class="section-label">
+            {aboutLabel}
+          </p>
+
+          <h2>
+            {aboutTitle}
+          </h2>
+
+          <p class="about-text">
+            {aboutText1}
+          </p>
+
+          <p class="about-text">
+            {aboutText2}
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           CV
+      ========================== -->
+
+      <section
+        id="cv"
+        class="placeholder-section"
+      >
+
+        <div class="section-inner">
+
+          <p class="section-label">
+            02 / {cvLabel}
+          </p>
+
+          <h2>
+            {cvLabel}
+          </h2>
+
+          <!--
+            Later:
+            Education
+            Work Experience
+          -->
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           PROJECTS
+      ========================== -->
+
+      <section
+        id="projects"
+        class="placeholder-section"
+      >
+
+        <div class="section-inner">
+
+          <p class="section-label">
+            03 / {projectsLabel}
+          </p>
+
+          <h2>
+            {projectsLabel}
+          </h2>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           RESEARCH
+      ========================== -->
+
+      {showResearch && (
+        <section
+          id="research"
+          class="placeholder-section"
+        >
+
+          <div class="section-inner">
+
+            <p class="section-label">
+              04 / {researchLabel}
+            </p>
+
+            <h2>
+              {researchLabel}
+            </h2>
+
+          </div>
+
+        </section>
+      )}
+
+
+      <!-- =========================
+           SKILLS
+      ========================== -->
+
+      {showSkills && (
+        <section
+          id="skills"
+          class="placeholder-section"
+        >
+
+          <div class="section-inner">
+
+            <p class="section-label">
+              05 / {skillsLabel}
+            </p>
+
+            <h2>
+              {skillsLabel}
+            </h2>
+
+          </div>
+
+        </section>
+      )}
+
+    </main>
+
+  </body>
+</html>
