@@ -1,0 +1,150 @@
+---
+/** Compact Python-style About Me; school names are intentionally placeholders. */
+const { lang = "en" } = Astro.props;
+const locale = lang === "zh-CN" || lang === "cn" || lang.startsWith("zh")
+  ? "cn" : lang.startsWith("de") ? "de" : "en";
+
+const text = {
+  en: {
+    section: "ABOUT ME", name: "Ran Li",
+    education: "education", work: "work_experience", skills: "skills", languages: "languages",
+    schools: [
+      ["2025–now", "[University] · M.Sc. Computational Linguistics"],
+      ["2021–2023", "[University] · M.A. German as a Foreign Language"],
+      ["2020–2023", "[University] · M.A. German Language and Literature"],
+      ["2016–2020", "[University] · B.A. German Language and Literature"],
+    ],
+    jobs: [
+      ["2023–2025", "Microelectronics Corporation · Interpreter & Compliance Specialist"],
+      ["2023", "[Affiliated School] · Lecturer"],
+      ["2019", "[University Press] · Assistant Editor"],
+    ],
+    skillsList: ["Python", "PyTorch", "scikit-learn", "Transformers", "NLP", "Speech Processing", "MATLAB", "Git", "LaTeX"],
+    languagesList: ["Chinese: native", "English: fluent", "German: fluent", "Latin: reading knowledge"],
+  },
+  de: {
+    section: "ÜBER MICH", name: "Ran Li",
+    education: "ausbildung", work: "berufserfahrung", skills: "kenntnisse", languages: "sprachen",
+    schools: [
+      ["2025–heute", "[Universität] · M.Sc. Computerlinguistik"],
+      ["2021–2023", "[Universität] · M.A. Deutsch als Fremdsprache"],
+      ["2020–2023", "[Universität] · M.A. Deutsche Sprache und Literatur"],
+      ["2016–2020", "[Universität] · B.A. Deutsche Sprache und Literatur"],
+    ],
+    jobs: [
+      ["2023–2025", "Mikroelektronikunternehmen · Dolmetscherin & Compliance-Spezialistin"],
+      ["2023", "[Bildungseinrichtung] · Dozentin"],
+      ["2019", "[Universitätsverlag] · Redaktionsassistenz"],
+    ],
+    skillsList: ["Python", "PyTorch", "scikit-learn", "Transformers", "NLP", "Sprachverarbeitung", "MATLAB", "Git", "LaTeX"],
+    languagesList: ["Chinesisch: Muttersprache", "Englisch: fließend", "Deutsch: fließend", "Latein: Lesekenntnisse"],
+  },
+  cn: {
+    section: "关于我", name: "Ran Li",
+    education: "education", work: "work_experience", skills: "skills", languages: "languages",
+    schools: [
+      ["2025–至今", "[学校名称] · 计算语言学硕士"],
+      ["2021–2023", "[学校名称] · 对外德语教学硕士"],
+      ["2020–2023", "[学校名称] · 德国语言文学硕士"],
+      ["2016–2020", "[学校名称] · 德国语言文学学士"],
+    ],
+    jobs: [
+      ["2023–2025", "微电子企业 · 口译与合规专员"],
+      ["2023", "[教育机构] · 语言学讲师"],
+      ["2019", "[大学出版社] · 编辑助理"],
+    ],
+    skillsList: ["Python", "PyTorch", "scikit-learn", "Transformers", "NLP", "语音处理", "MATLAB", "Git", "LaTeX"],
+    languagesList: ["中文：母语", "英语：流利", "德语：流利", "拉丁语：阅读能力"],
+  },
+};
+
+const t = text[locale];
+const lines = [];
+const p = (s) => ({ type: "plain", s });
+const k = (s) => ({ type: "keyword", s });
+const f = (s) => ({ type: "function", s });
+const s = (value) => ({ type: "string", s: JSON.stringify(value) });
+const c = (value) => ({ type: "comment", s: value });
+const push = (indent, ...parts) => lines.push({ indent, parts });
+
+push(0, c(`# ${t.section} / about.py`));
+push(0, k("class"), p(" "), f("RanLi"), p(":"));
+push(1, k("def"), p(" "), f("__init__"), p("(self):"));
+push(2, p("self.name = "), s(t.name));
+push(0, p(""));
+
+function addHistory(method, records) {
+  push(1, k("def"), p(" "), f(method), p("(self):"));
+  push(2, k("return"), p(" ["));
+  for (const [date, info] of records) {
+    push(3, p("{ "), s(date), p(": "), s(info), p(" },"));
+  }
+  push(2, p("]"));
+  push(0, p(""));
+}
+function addList(method, items) {
+  push(1, k("def"), p(" "), f(method), p("(self):"));
+  push(2, k("return"), p(" ["));
+  for (let i = 0; i < items.length; i += 3) {
+    const row = items.slice(i, i + 3);
+    push(3, ...row.flatMap((item, j) => [s(item), p(i + j === items.length - 1 ? "" : ", ")]));
+  }
+  push(2, p("]"));
+  push(0, p(""));
+}
+addHistory(t.education, t.schools);
+addHistory(t.work, t.jobs);
+addList(t.skills, t.skillsList);
+addList(t.languages, t.languagesList);
+---
+
+<section id="about" class="python-about" data-side-theme="blue">
+  <div class="about-code-wrap">
+    <p class="section-eyebrow">x1 / {t.section}</p>
+    <div class="about-code" aria-label={`${t.section}: Python-style résumé`}>
+      {lines.map((line) => (
+        <div class="python-line" style={`--indent:${line.indent}`}>
+          {line.parts.map((part) => <span class={`py-${part.type}`}>{part.s}</span>)}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .python-about {
+    background: var(--blue-main);
+    color: var(--black);
+    min-height: 100vh;
+    padding: 140px clamp(28px, 5vw, 80px) 120px calc(var(--rail-width) + var(--content-gap));
+  }
+  .about-code-wrap { width: 100%; min-width: 0; }
+  .section-eyebrow {
+    margin: 0 0 24px;
+    padding: 0;
+    color: var(--black);
+    font: 700 14px/1.5 "Courier New", Courier, monospace;
+    letter-spacing: .12em;
+    text-transform: none;
+  }
+  .about-code {
+    font: 600 clamp(15px, 1.22vw, 19px)/1.85 "Courier New", Courier, monospace;
+    letter-spacing: -.01em;
+    padding-bottom: 24px;
+  }
+  .python-line {
+    padding-left: calc(var(--indent) * 2.2ch);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .py-plain { color: #202a2d; }
+  .py-keyword { color: #6443aa; font-weight: 800; }
+  .py-function { color: #075c85; font-weight: 800; }
+  .py-string { color: #97610d; }
+  .py-comment { color: #526e78; font-weight: 500; }
+  @media (max-width: 760px) {
+    .python-about { padding: 120px 24px 80px; }
+    .about-code { font-size: 14px; line-height: 1.9; }
+    .python-line { padding-left: calc(var(--indent) * 1.55ch); }
+  }
+</style>

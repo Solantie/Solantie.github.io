@@ -1,0 +1,234 @@
+---
+/** A light-blue sticky-note wall. Edit `projects` below to add work and optional image URLs. */
+const { lang = 'en', projectsLabel } = Astro.props;
+const locale = lang === 'cn' || lang === 'zh-CN' || lang.startsWith('zh')
+  ? 'cn' : lang.startsWith('de') ? 'de' : 'en';
+
+const ui = {
+  en: {heading: 'PROJECTS', intro: 'Things I built, explored, and am still making.', all: 'All', speech: 'Speech Processing', game: 'Indie Game', plugin: 'PS Plugin', blog: 'Technical Blog', prototype: 'PROTOTYPE', coursework: 'COURSE PROJECT', planned: 'COMING SOON', view: 'VIEW PROJECT', empty: 'More projects will appear here.'},
+  de: {heading: 'PROJEKTE', intro: 'Was ich entwickelt, erforscht und ausprobiert habe.', all: 'Alle', speech: 'Sprachverarbeitung', game: 'Indie Game', plugin: 'PS-Plugin', blog: 'Technik-Blog', prototype: 'PROTOTYP', coursework: 'KURSPROJEKT', planned: 'IN PLANUNG', view: 'PROJEKT ANSEHEN', empty: 'Weitere Projekte folgen.'},
+  cn: {heading: '项目', intro: '做过的、研究过的，以及正在开发的东西。', all: '全部', speech: '语音处理', game: '独立游戏', plugin: 'PS 插件', blog: '技术博客', prototype: '原型', coursework: '课程项目', planned: '筹备中', view: '查看项目', empty: '更多项目会陆续加入。'},
+};
+const t = ui[locale];
+const categories = [
+  { key: 'all', label: t.all },
+  { key: 'speech', label: t.speech },
+  { key: 'game', label: t.game },
+  { key: 'plugin', label: t.plugin },
+  { key: 'blog', label: t.blog },
+];
+
+/**
+ * Each note takes a language-specific title and description.
+ * Replace `image: null` with a real image such as '/projects/lid.png' when ready.
+ * Replace `url: null` with a real URL. Null means no fake clickable link.
+ */
+const projects = [
+  {
+    id: 'fleurs-lid', category: 'speech', year: '2026', status: 'coursework',
+    image: null, url: null, tags: ['Python', 'PyTorch', 'MFCC', 'CNN'],
+    title: {en: 'Spoken Language ID', de: 'Spracherkennung nach Sprache', cn: '语种识别'},
+    description: {en: 'Identifying six spoken languages from short audio clips; exploring segment length and speaker leakage.', de: 'Sechs gesprochene Sprachen aus kurzen Audiosequenzen erkennen; Einfluss von Segmentlänge und Sprechertrennung.', cn: '使用短语音识别六种语言，并分析音频长度和说话人数据泄漏。'},
+  },
+  {
+    id: 'speech-filter', category: 'speech', year: '2026', status: 'coursework',
+    image: null, url: null, tags: ['MATLAB', 'F0', 'VAD'],
+    title: {en: 'Pitch-based Speech Filtering', de: 'Stimmbasierte Sprachfilterung', cn: '基于基频的语音过滤'},
+    description: {en: 'A training-free speech filtering pipeline comparing frame-level and segment-level masking.', de: 'Eine trainierungsfreie Pipeline zum Vergleich von frame- und segmentbasierten Maskierungsverfahren.', cn: '对比逐帧和逐语音片段掩码的免训练语音处理流程。'},
+  },
+  {
+    id: 'color-training', category: 'plugin', year: '2026', status: 'prototype',
+    image: null, url: null, tags: ['Color', 'UI', 'Prototype'],
+    title: {en: 'Color Training Lab', de: 'Farbtraining-Labor', cn: '色彩训练工具'},
+    description: {en: 'An interactive tool for practicing color perception and matching. A Photoshop workflow is being explored.', de: 'Ein interaktives Tool für Farbgefühl und Farbabgleich; die Photoshop-Integration wird untersucht.', cn: '通过交互练习训练色彩感知与匹配，并探索 Photoshop 工作流。'},
+  },
+  {
+    id: 'indie-game', category: 'game', year: '—', status: 'planned',
+    image: null, url: null, tags: ['Indie', 'Game'],
+    title: {en: 'Indie Game — To Be Added', de: 'Indie-Game — Folgt', cn: '独立游戏 · 待添加'},
+    description: {en: 'A space for future game prototypes and experiments.', de: 'Platz für zukünftige Spielprototypen und Experimente.', cn: '预留给之后的独立游戏和交互原型。'},
+  },
+  {
+    id: 'technical-blog', category: 'blog', year: '—', status: 'planned',
+    image: null, url: null, tags: ['Notes', 'Learning'],
+    title: {en: 'Technical Notes — To Be Added', de: 'Technische Notizen — Folgen', cn: '技术日志 · 待添加'},
+    description: {en: 'Short write-ups about what I learn and build.', de: 'Kurze Beiträge über meine Lern- und Entwicklungsprojekte.', cn: '记录技术学习、实验和项目开发过程。'},
+  },
+];
+const number = (i) => String(i + 1).padStart(2, '0');
+---
+<section id="projects" class="projects-wall" data-side-theme="blue">
+  <div class="projects-wrap">
+    <header class="projects-heading">
+      <p class="section-eyebrow">x2 / {projectsLabel ?? t.heading}</p>
+      <h2>{t.heading}<span aria-hidden="true">.</span></h2>
+      <p class="projects-intro">{t.intro}</p>
+    </header>
+
+    <div class="project-filters" role="group" aria-label={t.heading}>
+      {categories.map((category, i) => (
+        <button type="button" class:list={['filter-button', { 'is-selected': i === 0 }]} data-filter={category.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {category.label}<span class="filter-count" aria-hidden="true">{category.key === 'all' ? projects.length : projects.filter(p => p.category === category.key).length}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="note-wall">
+      {projects.map((project, i) => (
+        <article class="project-note" data-category={project.category} style={`--note-index: ${i}`}>
+          <span class="note-tape" aria-hidden="true"></span>
+          <div class="note-topline">
+            <span class="note-number">#{number(i)}</span>
+            <span class="note-year">{project.year}</span>
+          </div>
+          {project.image ? (
+            <img class="note-image" src={project.image} alt={project.title[locale]} loading="lazy" />
+          ) : (
+            <div class={`note-doodle note-doodle-${project.category}`} aria-hidden="true">
+              {project.category === 'speech' ? (
+                <svg viewBox="0 0 240 80" fill="none" preserveAspectRatio="xMidYMid meet"><path d="M0 40h19l7-12 10 26 9-41 11 55 11-35 10 14 12-7h17l7-22 11 43 10-31 11 13h25l8-18 9 28 9-16 10 7h22" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+              ) : project.category === 'plugin' ? (
+                <svg viewBox="0 0 200 80"><circle cx="85" cy="40" r="29" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="112" cy="40" r="29" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="98" cy="18" r="8" fill="currentColor" opacity=".3"/></svg>
+              ) : project.category === 'game' ? (
+                <svg viewBox="0 0 200 80" fill="none"><path d="M72 22h56l14 12 9 27-15 6-18-16H82L64 67l-15-6 9-27 14-12Z" stroke="currentColor" stroke-width="3"/><path d="M83 35v18m-9-9h18" stroke="currentColor" stroke-width="3"/><circle cx="120" cy="37" r="3" fill="currentColor"/><circle cx="132" cy="45" r="3" fill="currentColor"/></svg>
+              ) : (
+                <svg viewBox="0 0 200 80" fill="none"><path d="M56 17h88v50H56zM69 34l-10 9 10 9m62-18 10 9-10 9m-29-22-11 25" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+            </div>
+          )}
+          <div class="note-category">{t[project.category]}</div>
+          <h3>{project.title[locale]}</h3>
+          <p class="note-description">{project.description[locale]}</p>
+          <div class="note-bottom">
+            <div class="note-tags">{project.tags.map(tag => <span>{tag}</span>)}</div>
+            {project.url ? <a class="note-link" href={project.url} target="_blank" rel="noopener noreferrer">{t.view} ↗</a> : <span class="note-status">{t[project.status]}</span>}
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="projects-empty" hidden>{t.empty}</p>
+  </div>
+</section>
+
+<style>
+  .projects-wall {
+    min-height: 100vh;
+    padding: 140px clamp(28px, 5vw, 80px) 150px calc(var(--rail-width) + var(--content-gap));
+    background: var(--blue-main);
+    color: var(--black);
+    scroll-margin-top: var(--top-nav-height);
+  }
+  .projects-wrap { width: 100%; min-width: 0; }
+  .section-eyebrow {
+    margin: 0 0 24px;
+    color: var(--black);
+    font: 700 14px/1.5 "Courier New", Courier, monospace;
+    letter-spacing: .12em;
+  }
+  .projects-heading h2 {
+    margin: 0;
+    font-size: clamp(44px, 5vw, 82px);
+    line-height: 1.1;
+    letter-spacing: -.04em;
+  }
+  .projects-heading h2 span { color: var(--yellow-main); }
+  .projects-intro { margin: 14px 0 0; font-size: clamp(16px, 1.35vw, 20px); line-height: 1.6; }
+  .project-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 35px 0 54px; }
+  .filter-button {
+    font: 700 12px/1.4 "Courier New", Courier, monospace;
+    letter-spacing: .035em;
+    border: 1.5px solid var(--black);
+    background: transparent;
+    color: var(--black);
+    padding: 11px 13px;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .filter-button:hover { transform: translateY(-2px); }
+  .filter-button.is-selected { background: var(--yellow-main); }
+  .filter-button:focus-visible { outline: 3px solid var(--black); outline-offset: 3px; }
+  .filter-count { opacity: .55; font-size: 10px; margin-left: 9px; }
+  .note-wall { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 35px; align-items: start; }
+  .project-note {
+    --tilt: -1.4deg;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 385px;
+    position: relative;
+    padding: 25px clamp(19px, 2vw, 32px) 26px;
+    background: var(--yellow-main);
+    box-shadow: 7px 9px 0 rgba(23, 23, 23, .13);
+    transform: rotate(var(--tilt));
+    transition: transform .25s ease, box-shadow .25s ease;
+    isolation: isolate;
+  }
+  .project-note:nth-child(4n + 2) { --tilt: 1.3deg; margin-top: 26px; }
+  .project-note:nth-child(4n + 3) { --tilt: .7deg; margin-top: -10px; }
+  .project-note:nth-child(4n + 4) { --tilt: -1deg; margin-top: 18px; }
+  .project-note:hover, .project-note:focus-within { transform: translateY(-8px) rotate(0deg); box-shadow: 10px 14px 0 rgba(23, 23, 23, .17); z-index: 2; }
+  .project-note[hidden] { display: none !important; }
+  .note-tape {
+    position: absolute;
+    width: 78px;
+    height: 23px;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    background: rgba(255, 253, 247, .62);
+    border: 1px solid rgba(23, 23, 23, .10);
+    box-shadow: 0 1px 2px rgba(23,23,23,.04);
+  }
+  .note-topline { display: flex; justify-content: space-between; align-items: center; gap: 10px; font: 700 12px/1.4 "Courier New", Courier, monospace; }
+  .note-year { opacity: .7; }
+  .note-doodle { height: 118px; display: flex; justify-content: center; align-items: center; color: #171717; opacity: .68; margin: 18px 0 13px; border: 1px dashed rgba(23,23,23,.35); }
+  .note-doodle svg { width: min(75%, 260px); height: 85px; }
+  .note-image { display: block; width: 100%; height: 148px; object-fit: cover; margin: 18px 0 13px; border: 2px solid var(--black); }
+  .note-category { font: 700 11px/1.4 "Courier New", Courier, monospace; letter-spacing: .12em; text-transform: uppercase; opacity: .72; }
+  .project-note h3 { margin: 8px 0 12px; font-size: clamp(20px, 1.9vw, 28px); line-height: 1.25; overflow-wrap: anywhere; }
+  .note-description { margin: 0 0 20px; font-size: clamp(14px, 1.12vw, 17px); line-height: 1.55; }
+  .note-bottom { margin-top: auto; display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 15px; }
+  .note-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .note-tags span { font: 700 10px/1.3 "Courier New", Courier, monospace; padding: 5px 7px; background: rgba(255,255,255,.43); }
+  .note-link, .note-status { font: 700 11px/1.35 "Courier New", Courier, monospace; color: var(--black); text-decoration: none; }
+  .note-link { border-bottom: 2px solid var(--black); }
+  .note-link:hover { opacity: .65; }
+  .note-status { opacity: .62; }
+  .projects-empty { margin: 30px 0 0; font-size: 16px; }
+  @media (max-width: 1180px) { .note-wall { grid-template-columns: 1fr; gap: 28px; } .project-note:nth-child(n) { margin-top: 0; } }
+  @media (max-width: 760px) {
+    .projects-wall { padding: 115px 28px 100px; }
+    .project-filters { margin-bottom: 35px; }
+    .filter-button { font-size: 11px; }
+    .project-note { min-height: 360px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .project-note, .filter-button { transition: none; } }
+</style>
+
+<script>
+  // Works across all three translated pages without needing a framework.
+  function initProjectFilters() {
+    const section = document.querySelector('.projects-wall');
+    if (!section || section.dataset.filtersReady === 'true') return;
+    section.dataset.filtersReady = 'true';
+    const buttons = [...section.querySelectorAll('.filter-button')];
+    const cards = [...section.querySelectorAll('.project-note')];
+    const empty = section.querySelector('.projects-empty');
+    buttons.forEach(button => button.addEventListener('click', () => {
+      const category = button.dataset.filter;
+      buttons.forEach(b => {
+        const selected = b === button;
+        b.classList.toggle('is-selected', selected);
+        b.setAttribute('aria-pressed', String(selected));
+      });
+      let shown = 0;
+      cards.forEach(card => {
+        card.hidden = category !== 'all' && card.dataset.category !== category;
+        if (!card.hidden) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    }));
+  }
+  initProjectFilters();
+  document.addEventListener('astro:page-load', initProjectFilters);
+</script>
