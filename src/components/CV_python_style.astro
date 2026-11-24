@@ -1,0 +1,348 @@
+---
+/**
+ * Multilingual CV section for Astro.
+ * Usage: <CV lang={lang} />
+ * Edit schoolName placeholders in the `education` array when ready.
+ */
+const { lang = "en" } = Astro.props;
+const locale = lang === "zh-CN" || lang === "cn" || lang.startsWith("zh")
+  ? "cn"
+  : lang.startsWith("de") ? "de" : "en";
+
+const translations = {
+  en: {
+    eyebrow: "02 / CURRICULUM VITAE", title: "CV.",
+    intro: "Education, professional experience, and academic work.",
+    education: "EDUCATION", professional: "WORK EXPERIENCE",
+    academic: "RESEARCH & TEACHING", awards: "AWARDS",
+    present: "Present", institutionPlaceholder: "[University name — add later]",
+    entries: {
+      masterCL: ["M.Sc. Computational Linguistics", "Focus: speech processing, NLP, deep learning", "Relevant courses: Deep Learning, Reinforcement Learning, Information Retrieval & Text Mining"],
+      masterGerman: ["M.A. German Language and Literature", "Thesis: Metadiscourse in MOOCs — An Analysis of Teacher Discourse in Online German Courses", "Multimodal qualitative analysis of instructional discourse"],
+      masterDaF: ["M.A. Deutsch als Fremdsprache (DaF)", "Dual-degree program"],
+      bachelor: ["B.A. German Language and Literature", "Minor: English Translation and Interpreting", "Thesis: Frau als Minne-Streberin im Minnesang"],
+      fulltime: ["Interpreter & Compliance Specialist", "Microelectronics Corporation · Shanghai", "Monitored semiconductor industry developments and U.S. export-control regulations; prepared Chinese briefings for management.", "Interpreted English–Chinese business negotiations and visits involving international industry representatives.", "Built and maintained bilingual semiconductor and legal terminology resources (1,000+ terms).", "Reviewed and translated commercial and legal contracts; drafted internal compliance materials and delivered training.", "Supported ISO 9001 and ISO/IEC 27001 internal and external audit processes."],
+      teaching: ["Lecturer · Introduction to Linguistics", "Affiliated School · Shanghai", "Taught 10 students using cross-linguistic comparisons of Chinese, English, and German."],
+      editor: ["Assistant Editor", "University Press · Shanghai", "Coordinated publishing details with authors, proofread manuscripts, and supported planning for an online course."],
+      coaching: ["Research Project Support", "[University name — add later] · Marburg", "Recruited seven participants, assessed language proficiency, and provided language coaching."],
+      litreview: ["Research Assistant · Metadiscourse", "[University name — add later] · Shanghai", "Reviewed research on metadiscourse and metacommunication in German academic writing and helped categorize discourse strategies."],
+      transcription: ["Research Support · Spoken German", "[University name — add later] · Shanghai", "Collected and transcribed oral German assessments and conducted preliminary error analysis."],
+    },
+    awardsList: [
+      ["First Prize · Siyuan Transcreation Award", "10/2021", "Chinese–English marketing translation and layout design"],
+      ["Honors Scholarship", "06/2020", ""],
+      ["Faculty Scholarship · 8 awards", "2016–2020", ""],
+    ],
+    note: "Technical course projects are presented separately in Projects."
+  },
+  de: {
+    eyebrow: "02 / LEBENSLAUF", title: "CV.",
+    intro: "Ausbildung, Berufserfahrung und wissenschaftliche Tätigkeiten.",
+    education: "AUSBILDUNG", professional: "BERUFSERFAHRUNG",
+    academic: "FORSCHUNG & LEHRE", awards: "AUSZEICHNUNGEN",
+    present: "heute", institutionPlaceholder: "[Universitätsname später ergänzen]",
+    entries: {
+      masterCL: ["M.Sc. Computational Linguistics", "Schwerpunkte: Sprachverarbeitung, NLP und Deep Learning", "Relevante Lehrveranstaltungen: Deep Learning, Reinforcement Learning, Information Retrieval & Text Mining"],
+      masterGerman: ["M.A. German Language and Literature", "Masterarbeit: Metadiskurs in MOOCs – eine Analyse der Lehrendensprache in Online-Deutschkursen", "Multimodale qualitative Analyse von Lehrdiskursen"],
+      masterDaF: ["M.A. Deutsch als Fremdsprache (DaF)", "Doppelabschlussprogramm"],
+      bachelor: ["B.A. German Language and Literature", "Nebenfach: Englisches Übersetzen und Dolmetschen", "Abschlussarbeit: Frau als Minne-Streberin im Minnesang"],
+      fulltime: ["Dolmetscherin & Compliance-Spezialistin", "Mikroelektronikunternehmen · Shanghai", "Beobachtung der Halbleiterbranche und US-Exportkontrollvorschriften; Erstellung chinesischer Briefings für die Geschäftsleitung.", "Englisch-chinesisches Dolmetschen bei internationalen Geschäftsverhandlungen und Unternehmensbesuchen.", "Aufbau und Pflege zweisprachiger Terminologiedatenbanken für Halbleitertechnik und Recht (über 1.000 Einträge).", "Prüfung und Übersetzung von Verträgen; Erstellung von Compliance-Unterlagen und Durchführung von Schulungen.", "Mitwirkung an internen und externen Audits nach ISO 9001 und ISO/IEC 27001."],
+      teaching: ["Dozentin · Einführung in die Linguistik", "Angeschlossene Bildungseinrichtung · Shanghai", "Unterricht für zehn Lernende mit Sprachvergleichen zwischen Chinesisch, Englisch und Deutsch."],
+      editor: ["Redaktionsassistenz", "Universitätsverlag · Shanghai", "Abstimmung mit Autorinnen und Autoren, Korrekturlesen und Mitplanung eines Onlinekurses."],
+      coaching: ["Mitarbeit an einem Forschungsprojekt", "[Universitätsname später ergänzen] · Marburg", "Rekrutierung von sieben Teilnehmenden, Sprachstandserhebung und Sprachlernberatung."],
+      litreview: ["Wissenschaftliche Hilfskraft · Metadiskurs", "[Universitätsname später ergänzen] · Shanghai", "Literaturrecherche zu Metadiskurs und Metakommunikation in der deutschen Wissenschaftssprache; Mitwirkung an der Kategorisierung von Strategien."],
+      transcription: ["Forschungsmitarbeit · Gesprochenes Deutsch", "[Universitätsname später ergänzen] · Shanghai", "Erhebung und Transkription mündlicher Deutschprüfungen sowie erste Fehleranalysen."],
+    },
+    awardsList: [
+      ["1. Preis · Siyuan Transcreation Award", "10/2021", "Chinesisch-englische Marketingübersetzung und Layoutgestaltung"],
+      ["Honors Scholarship", "06/2020", ""],
+      ["Fakultätsstipendium · 8 Auszeichnungen", "2016–2020", ""],
+    ],
+    note: "Technische Studienprojekte werden separat unter Projects vorgestellt."
+  },
+  cn: {
+    eyebrow: "02 / 个人履历", title: "CV.",
+    intro: "教育背景、职业经历与科研教学经验。",
+    education: "教育背景", professional: "工作经历",
+    academic: "科研与教学", awards: "获奖经历",
+    present: "至今", institutionPlaceholder: "[学校名称待补充]",
+    entries: {
+      masterCL: ["计算语言学硕士 · M.Sc.", "研究重点：语音处理、自然语言处理与深度学习", "相关课程：深度学习、强化学习、信息检索与文本挖掘"],
+      masterGerman: ["德国语言文学硕士 · M.A.", "硕士论文：MOOC 中的元话语——在线德语课程中的教师话语分析", "采用多模态定性方法分析教学话语"],
+      masterDaF: ["对外德语教学硕士 · M.A. DaF", "双学位项目"],
+      bachelor: ["德国语言文学学士 · B.A.", "辅修：英语笔译与口译", "毕业论文：中古高地德语爱情诗歌中的女性主动追求者"],
+      fulltime: ["口译与合规专员", "微电子企业 · 上海", "跟踪半导体行业动态及美国出口管制法规，为管理层制作中文简报。", "承担国际商务谈判、企业访问等场合的英中口译工作。", "建立并维护半导体与法律双语术语库，累计超过 1,000 条术语。", "审校和翻译中英文商务及法律合同，编写合规手册并开展培训。", "参与 ISO 9001 与 ISO/IEC 27001 内审及外审准备。"],
+      teaching: ["讲师 · 语言学导论", "附属教育机构 · 上海", "面向十名学生授课，侧重中、英、德三种语言的对比。"],
+      editor: ["编辑助理", "大学出版社 · 上海", "与作者沟通出版事宜、校对文稿，并参与线上课程策划。"],
+      coaching: ["科研项目协助", "[学校名称待补充] · 马尔堡", "招募七名参与者，开展语言能力评估与语言学习辅导。"],
+      litreview: ["科研助理 · 元话语研究", "[学校名称待补充] · 上海", "梳理德语学术话语中元话语与元交际研究文献，参与话语策略初步分类。"],
+      transcription: ["科研协助 · 德语口语语料", "[学校名称待补充] · 上海", "收集并转写德语专业学生口语测试录音，完成初步错误分析。"],
+    },
+    awardsList: [
+      ["思源创译奖 · 一等奖", "10/2021", "企业宣传材料中译英与版式设计"],
+      ["荣誉学院奖学金", "06/2020", ""],
+      ["院系奖学金 · 共 8 次", "2016–2020", ""],
+    ],
+    note: "技术课程项目将在 Projects 板块单独展示。"
+  }
+};
+
+const showAwards = false; // Change to true to show awards in the code CV.
+const t = translations[locale];
+const e = t.entries;
+const education = [
+  { date: `10/2025 – ${t.present}`, school: t.institutionPlaceholder, items: e.masterCL },
+  { date: "09/2020 – 06/2023", school: t.institutionPlaceholder, items: e.masterGerman },
+  { date: "10/2021 – 05/2023", school: t.institutionPlaceholder, items: e.masterDaF },
+  { date: "09/2016 – 06/2020", school: t.institutionPlaceholder, items: e.bachelor }
+];
+const work = [
+  { date: "04/2023 – 09/2025", items: e.fulltime },
+  { date: "02/2023 – 04/2023", items: e.teaching },
+  { date: "07/2019 – 09/2019", items: e.editor }
+];
+const academic = [
+  { date: "10/2021 – 03/2022", items: e.coaching },
+  { date: "09/2020 – 06/2021", items: e.litreview },
+  { date: "09/2020 – 01/2021", items: e.transcription }
+];
+
+// Build Python-looking source lines with typed tokens for syntax highlighting.
+const lines = [];
+const part = (type, text) => ({ type, text: String(text) });
+const kw = (s) => part("keyword", s);
+const fn = (s) => part("function", s);
+const cls = (s) => part("class", s);
+const str = (s) => part("string", JSON.stringify(String(s)));
+const plain = (s) => part("plain", s);
+const field = (s) => part("field", s);
+const comment = (s) => part("comment", s);
+const num = (s) => part("number", s);
+const pyline = (indent, ...tokens) => lines.push({ indent, tokens });
+
+pyline(0, comment(`# ${t.eyebrow}`));
+pyline(0, kw("class"), plain(" "), cls("RanLi"), plain(":"));
+pyline(1, kw("def"), plain(" "), fn("__init__"), plain("("), kw("self"), plain("):"));
+pyline(2, kw("self"), plain("."), field("name"), plain(" = "), str("Ran Li"));
+pyline(2, kw("self"), plain("."), field("focus"), plain(" = "), str(locale === "cn" ? "计算语言学 · 语言技术 · AI" : locale === "de" ? "Computerlinguistik · Sprachtechnologie · KI" : "Computational Linguistics · Language Tech · AI"));
+pyline(0, plain(""));
+
+const addSection = (method, title, entries, kind) => {
+  pyline(1, comment(`# ${title}`));
+  pyline(1, kw("def"), plain(" "), fn(method), plain("("), kw("self"), plain("):"));
+  pyline(2, kw("return"), plain(" ["));
+  entries.forEach(entry => {
+    pyline(3, plain("{"));
+    pyline(4, str("period"), plain(": "), str(entry.date), plain(","));
+    pyline(4, str(kind === "education" ? "degree" : "role"), plain(": "), str(entry.items[0]), plain(","));
+    const place = kind === "education" ? entry.school : entry.items[1];
+    pyline(4, str(kind === "education" ? "institution" : "organization"), plain(": "), str(place), plain(","));
+    const details = kind === "education" ? entry.items.slice(1) : entry.items.slice(2);
+    if (details.length) {
+      pyline(4, str("highlights"), plain(": ["));
+      details.forEach(item => pyline(5, str(item), plain(",")));
+      pyline(4, plain("],"));
+    }
+    pyline(3, plain("},"));
+  });
+  pyline(2, plain("]"));
+  pyline(0, plain(""));
+};
+
+addSection("education", t.education, education, "education");
+addSection("work_experience", t.professional, work, "work");
+addSection("research_and_teaching", t.academic, academic, "academic");
+
+if (showAwards) {
+  pyline(1, comment(`# ${t.awards}`));
+  pyline(1, kw("def"), plain(" "), fn("awards"), plain("("), kw("self"), plain("):"));
+  pyline(2, kw("return"), plain(" ["));
+  for (const [name, date, detail] of t.awardsList) {
+    pyline(3, plain("{"), str("award"), plain(": "), str(name), plain(", "), str("date"), plain(": "), str(date), detail ? plain(", ") : plain(""), ...(detail ? [str("detail"), plain(": "), str(detail)] : []), plain("},"));
+  }
+  pyline(2, plain("]"));
+  pyline(0, plain(""));
+}
+
+pyline(0, comment("# end of cv.py"));
+---
+
+<section id="cv" class="code-cv-section" data-side-theme="blue">
+  <div class="code-cv-wrap">
+    <div class="code-cv-heading">
+      <span class="code-cv-path">02 / {t.title}</span>
+      <span class="code-cv-file">ran_li.py</span>
+    </div>
+
+    <div class="code-editor" aria-label={`${t.title} — Python-style résumé`}>
+      <div class="editor-toolbar" aria-hidden="true">
+        <span class="editor-dot"></span>
+        <span class="editor-dot"></span>
+        <span class="editor-dot"></span>
+        <span class="editor-file">⌁ &nbsp; ran_li.py</span>
+        <span class="editor-lang">Python</span>
+      </div>
+
+      <div class="code-lines">
+        {lines.map((line, i) => (
+          <div class="code-line" key={i}>
+            <span class="code-number" aria-hidden="true">{i + 1}</span>
+            <span class="code-text" style={`--indent:${line.indent}`}>
+              {line.tokens.map((token) => <span class={`tok-${token.type}`}>{token.text}</span>)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .code-cv-section {
+    background: var(--blue-main);
+    min-height: 100vh;
+    padding: 125px clamp(28px, 4vw, 70px) 125px calc(var(--rail-width) + var(--content-gap));
+    color: var(--black);
+  }
+
+  .code-cv-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .code-cv-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 22px;
+  }
+
+  .code-cv-path {
+    font-size: clamp(19px, 2vw, 27px);
+    font-weight: 700;
+    letter-spacing: .045em;
+  }
+
+  .code-cv-file {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+
+  .code-editor {
+    overflow: hidden;
+    border: 1px solid #36313f;
+    border-radius: 5px;
+    background: #14111d;
+    box-shadow: 8px 8px 0 rgba(23, 23, 23, .13);
+    color: #e9e5f2;
+    font-family: "Courier New", Courier, monospace;
+  }
+
+  .editor-toolbar {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px;
+    background: #201b2a;
+    border-bottom: 1px solid #3d3548;
+  }
+
+  .editor-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #706678;
+  }
+
+  .editor-file {
+    margin-left: 12px;
+    color: #c5bdd3;
+    font-size: 14px;
+  }
+
+  .editor-lang {
+    margin-left: auto;
+    color: #90869b;
+    font-size: 13px;
+  }
+
+  .code-lines {
+    padding: 26px 12px 35px 0;
+    overflow-x: auto;
+  }
+
+  .code-line {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    align-items: baseline;
+    min-height: 30px;
+    font-size: clamp(15px, 1.05vw, 18px);
+    line-height: 1.8;
+  }
+
+  .code-number {
+    padding-right: 20px;
+    text-align: right;
+    color: #655d70;
+    font-size: 12px;
+    user-select: none;
+  }
+
+  .code-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding-left: calc(var(--indent) * 1.6em);
+    padding-right: 20px;
+  }
+
+  .tok-keyword { color: #a686ff; font-weight: bold; }
+  .tok-class { color: #f6ec74; font-weight: bold; }
+  .tok-function { color: #70caff; font-weight: bold; }
+  .tok-field { color: #ff8ca6; }
+  .tok-string { color: #9ff58e; }
+  .tok-number { color: #ffbd7a; }
+  .tok-comment { color: #8b8394; }
+  .tok-plain { color: #e9e5f2; }
+
+  @media (max-width: 1050px) {
+    .code-cv-section {
+      padding-right: 25px;
+    }
+
+    .code-line {
+      grid-template-columns: 45px minmax(0, 1fr);
+    }
+
+    .code-text {
+      padding-left: calc(var(--indent) * 1.25em);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .code-cv-section {
+      padding: 122px 18px 80px;
+    }
+
+    .code-cv-file {
+      display: none;
+    }
+
+    .code-line {
+      font-size: 14px;
+      grid-template-columns: 36px minmax(0, 1fr);
+    }
+
+    .code-number {
+      padding-right: 8px;
+      font-size: 11px;
+    }
+
+    .code-text {
+      padding-left: calc(var(--indent) * .95em);
+      padding-right: 6px;
+    }
+  }
+</style>

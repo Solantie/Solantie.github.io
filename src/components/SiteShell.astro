@@ -1,4 +1,5 @@
 ---
+import CV from "./CV_python_style.astro";
 const {
   lang = "en",
 
@@ -73,21 +74,55 @@ const {
 
         <!-- LANGUAGE SWITCHER -->
 
-        <div class="language-switcher">
+        <details class="language-switcher">
 
-          <a href="/en/">
-            EN
-          </a>
+          <summary class="language-trigger">
+            {lang === "zh-CN" || lang === "cn"
+              ? "语言"
+              : lang.startsWith("de")
+                ? "SPRACHE"
+                : "LANGUAGE"}
 
-          <a href="/de/">
-            DE
-          </a>
+            <span class="language-arrow">▾</span>
+          </summary>
 
-          <a href="/cn/">
-            中文
-          </a>
+          <div class="language-dropdown">
 
-        </div>
+            <a
+              href="/cn/"
+              class:list={[
+                {
+                  active: lang === "zh-CN" || lang === "cn"
+                }
+              ]}
+            >
+              中文
+            </a>
+
+            <a
+              href="/de/"
+              class:list={[
+                { active: lang.startsWith("de") }
+              ]}
+            >
+              Deutsch
+            </a>
+
+            <a
+              href="/en/"
+              class:list={[
+                { active: lang.startsWith("en") }
+              ]}
+            >
+              English
+            </a>
+
+          </div>
+
+        </details>
+
+
+
 
       </nav>
 
@@ -97,90 +132,62 @@ const {
     <!-- =========================
          FIXED SIDE NAV
     ========================== -->
-
     <aside class="side-nav">
 
-      <!-- temporary portrait -->
-      <div class="mini-card">
-        <span>AI</span>
+      <div class="input-card">
+        <span class="input-symbol">INPUT</span>
+        <span class="input-name">RAN</span>
+
+        <!-- 连接线起点 -->
+        <span class="input-anchor" aria-hidden="true"></span>
       </div>
 
-
-      <!-- neural navigation -->
-
+      <!-- NETWORK -->
+      <div class="hover-connector" aria-hidden="true"></div>
       <div class="network-line">
 
-        <!-- ABOUT -->
-
-        <a
-          class="node node-one"
-          href="#about"
-          aria-label={aboutLabel}
-        >
-          <span class="node-label">
-            {aboutLabel}
-          </span>
+        <a class="node node-one" href="#about">
+          <span class="node-index">x1</span>
+          <span class="node-label">{aboutLabel}</span>
         </a>
 
-
-        <!-- CV -->
-
-        <a
-          class="node node-two"
-          href="#cv"
-          aria-label={cvLabel}
-        >
-          <span class="node-label">
-            {cvLabel}
-          </span>
+        <a class="node node-two" href="#cv">
+          <span class="node-index">x2</span>
+          <span class="node-label">{cvLabel}</span>
         </a>
 
-
-        <!-- PROJECTS -->
-
-        <a
-          class="node node-three"
-          href="#projects"
-          aria-label={projectsLabel}
-        >
-          <span class="node-label">
-            {projectsLabel}
-          </span>
+        <a class="node node-three" href="#projects">
+          <span class="node-index">x3</span>
+          <span class="node-label">{projectsLabel}</span>
         </a>
-
-
-        <!-- RESEARCH -->
 
         {showResearch && (
-          <a
-            class="node node-four"
-            href="#research"
-            aria-label={researchLabel}
-          >
-            <span class="node-label">
-              {researchLabel}
-            </span>
+          <a class="node node-four" href="#research">
+            <span class="node-index">x4</span>
+            <span class="node-label">{researchLabel}</span>
           </a>
         )}
-
-
-        <!-- SKILLS -->
 
         {showSkills && (
-          <a
-            class="node node-five"
-            href="#skills"
-            aria-label={skillsLabel}
-          >
-            <span class="node-label">
-              {skillsLabel}
-            </span>
+          <a class="node node-five" href="#skills">
+            <span class="node-index">x5</span>
+            <span class="node-label">{skillsLabel}</span>
           </a>
         )}
+
+        <a class="output-node" href="#contact">
+          <span class="output-symbol">ŷ</span>
+          <span class="output-label">CONTACT</span>
+        </a>
 
       </div>
 
     </aside>
+
+
+
+
+
 
 
     <!-- =========================
@@ -250,30 +257,7 @@ const {
            CV
       ========================== -->
 
-      <section
-        id="cv"
-        class="placeholder-section"
-      >
-
-        <div class="section-inner">
-
-          <p class="section-label">
-            02 / {cvLabel}
-          </p>
-
-          <h2>
-            {cvLabel}
-          </h2>
-
-          <!--
-            Later:
-            Education
-            Work Experience
-          -->
-
-        </div>
-
-      </section>
+      <CV lang={lang} />
 
 
       <!-- =========================
@@ -351,7 +335,188 @@ const {
         </section>
       )}
 
+        <section id="contact" class="placeholder-section">
+          <div class="section-inner">
+            <p class="section-label">OUTPUT</p>
+            <h2>CONTACT</h2>
+          </div>
+        </section>
+
     </main>
+
+    <script is:inline>
+  const sideNav = document.querySelector(".side-nav");
+  const inputAnchor = document.querySelector(".input-anchor");
+  const connector = document.querySelector(".hover-connector");
+
+  const nodes = Array.from(
+    document.querySelectorAll(".node")
+  );
+
+  const sections = Array.from(
+    document.querySelectorAll(
+      "#about, #cv, #projects, #research, #skills"
+    )
+  );
+
+  let activeNode = null;
+
+  function drawConnector(node) {
+    if (!sideNav || !inputAnchor || !connector || !node) return;
+
+    const navRect = sideNav.getBoundingClientRect();
+    const startRect = inputAnchor.getBoundingClientRect();
+    const endRect = node.getBoundingClientRect();
+
+    const startX =
+      startRect.left +
+      startRect.width / 2 -
+      navRect.left;
+
+    const startY =
+      startRect.top +
+      startRect.height / 2 -
+      navRect.top;
+
+    const endX =
+      endRect.left +
+      endRect.width / 2 -
+      navRect.left;
+
+    const endY =
+      endRect.top +
+      endRect.height / 2 -
+      navRect.top;
+
+    const dx = endX - startX;
+    const dy = endY - startY;
+
+    const length =
+      Math.sqrt(dx * dx + dy * dy);
+
+    const angle =
+      Math.atan2(dy, dx) * 180 / Math.PI;
+
+    connector.style.left = `${startX}px`;
+    connector.style.top = `${startY}px`;
+    connector.style.width = `${length}px`;
+    connector.style.transform =
+      `rotate(${angle}deg)`;
+
+    connector.style.opacity = "1";
+  }
+
+  function setActiveNode(node) {
+    nodes.forEach((item) => {
+      item.classList.remove("active");
+    });
+
+    if (!node) return;
+
+    node.classList.add("active");
+
+    activeNode = node;
+
+    drawConnector(node);
+  }
+
+  function findNodeForSection(section) {
+    if (!section?.id) return null;
+
+    return document.querySelector(
+      `.node[href="#${section.id}"]`
+    );
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visibleEntries = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort(
+          (a, b) =>
+            b.intersectionRatio -
+            a.intersectionRatio
+        );
+
+      if (!visibleEntries.length) return;
+
+      const currentSection =
+        visibleEntries[0].target;
+
+      const node =
+        findNodeForSection(currentSection);
+
+      if (node) {
+        setActiveNode(node);
+      }
+    },
+    {
+      root: null,
+
+      rootMargin:
+        "-30% 0px -45% 0px",
+
+      threshold: [
+        0,
+        0.1,
+        0.25,
+        0.5,
+        0.75
+      ]
+    }
+  );
+
+  sections.forEach((section) => {
+    observer.observe(section);
+  });
+
+  /* hover temporarily overrides active state */
+
+  nodes.forEach((node) => {
+    node.addEventListener(
+      "mouseenter",
+      () => {
+        drawConnector(node);
+      }
+    );
+
+    node.addEventListener(
+      "mouseleave",
+      () => {
+        if (activeNode) {
+          drawConnector(activeNode);
+        }
+      }
+    );
+
+    node.addEventListener(
+      "focus",
+      () => {
+        drawConnector(node);
+      }
+    );
+
+    node.addEventListener(
+      "blur",
+      () => {
+        if (activeNode) {
+          drawConnector(activeNode);
+        }
+      }
+    );
+  });
+
+  /* redraw on resize */
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (activeNode) {
+        drawConnector(activeNode);
+      }
+    }
+  );
+</script>
 
   </body>
 </html>
