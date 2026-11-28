@@ -1,0 +1,90 @@
+---
+/** One reusable note. No project data here; change src/data/projects.js. */
+const { project, index, locale, ui } = Astro.props;
+const title = project.title?.[locale] ?? project.title?.en ?? project.id;
+const description = project.description?.[locale] ?? project.description?.en ?? '';
+const categoryLabel = ui[project.category] ?? project.category;
+const statusLabel = ui[project.status] ?? project.status;
+const viewLabel = ui.view;
+const external = Boolean(project.url && /^https?:\/\//i.test(project.url));
+const number = String(index + 1).padStart(2, '0');
+---
+        <article class="project-note" data-category={project.category}>
+          <span class="note-tape" aria-hidden="true"></span>
+          <div class="note-topline">
+            <span class="note-number">#{number}</span>
+            <span class="note-year">{project.year}</span>
+          </div>
+          {project.image ? (
+            <img class="note-image" src={project.image} alt={title} loading="lazy" />
+          ) : (
+            <div class={`note-doodle note-doodle-${project.category}`} aria-hidden="true">
+              {project.category === 'speech' ? (
+                <svg viewBox="0 0 240 80" fill="none" preserveAspectRatio="xMidYMid meet"><path d="M0 40h19l7-12 10 26 9-41 11 55 11-35 10 14 12-7h17l7-22 11 43 10-31 11 13h25l8-18 9 28 9-16 10 7h22" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+              ) : project.category === 'plugin' ? (
+                <svg viewBox="0 0 200 80"><circle cx="85" cy="40" r="29" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="112" cy="40" r="29" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="98" cy="18" r="8" fill="currentColor" opacity=".3"/></svg>
+              ) : project.category === 'game' ? (
+                <svg viewBox="0 0 200 80" fill="none"><path d="M72 22h56l14 12 9 27-15 6-18-16H82L64 67l-15-6 9-27 14-12Z" stroke="currentColor" stroke-width="3"/><path d="M83 35v18m-9-9h18" stroke="currentColor" stroke-width="3"/><circle cx="120" cy="37" r="3" fill="currentColor"/><circle cx="132" cy="45" r="3" fill="currentColor"/></svg>
+              ) : (
+                <svg viewBox="0 0 200 80" fill="none"><path d="M56 17h88v50H56zM69 34l-10 9 10 9m62-18 10 9-10 9m-29-22-11 25" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+            </div>
+          )}
+          <div class="note-category">{categoryLabel}</div>
+          <h3>{title}</h3>
+          <p class="note-description">{description}</p>
+          <div class="note-bottom">
+            <div class="note-tags">{(project.tags ?? []).map(tag => <span>{tag}</span>)}</div>
+            {project.url ? <a class="note-link" href={project.url} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>{viewLabel} ↗</a> : <span class="note-status">{statusLabel}</span>}
+          </div>
+        </article>
+<style>
+  .project-note {
+    --tilt: -1.4deg;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 385px;
+    position: relative;
+    padding: 25px clamp(19px, 2vw, 32px) 26px;
+    background: var(--yellow-main);
+    box-shadow: 7px 9px 0 rgba(23, 23, 23, .13);
+    transform: rotate(var(--tilt));
+    transition: transform .25s ease, box-shadow .25s ease;
+    isolation: isolate;
+  }
+  .project-note:nth-child(4n + 2) { --tilt: 1.3deg; margin-top: 26px; }
+  .project-note:nth-child(4n + 3) { --tilt: .7deg; margin-top: -10px; }
+  .project-note:nth-child(4n + 4) { --tilt: -1deg; margin-top: 18px; }
+  .project-note:hover, .project-note:focus-within { transform: translateY(-8px) rotate(0deg); box-shadow: 10px 14px 0 rgba(23, 23, 23, .17); z-index: 2; }
+  .project-note[hidden] { display: none !important; }
+  .note-tape {
+    position: absolute;
+    width: 78px;
+    height: 23px;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    background: rgba(255, 253, 247, .62);
+    border: 1px solid rgba(23, 23, 23, .10);
+    box-shadow: 0 1px 2px rgba(23,23,23,.04);
+  }
+  .note-topline { display: flex; justify-content: space-between; align-items: center; gap: 10px; font: 700 12px/1.4 "Courier New", Courier, monospace; }
+  .note-year { opacity: .7; }
+  .note-doodle { height: 118px; display: flex; justify-content: center; align-items: center; color: #171717; opacity: .68; margin: 18px 0 13px; border: 1px dashed rgba(23,23,23,.35); }
+  .note-doodle svg { width: min(75%, 260px); height: 85px; }
+  .note-image { display: block; width: 100%; height: 148px; object-fit: cover; margin: 18px 0 13px; border: 2px solid var(--black); }
+  .note-category { font: 700 11px/1.4 "Courier New", Courier, monospace; letter-spacing: .12em; text-transform: uppercase; opacity: .72; }
+  .project-note h3 { margin: 8px 0 12px; font-size: clamp(20px, 1.9vw, 28px); line-height: 1.25; overflow-wrap: anywhere; }
+  .note-description { margin: 0 0 20px; font-size: clamp(14px, 1.12vw, 17px); line-height: 1.55; }
+  .note-bottom { margin-top: auto; display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 15px; }
+  .note-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .note-tags span { font: 700 10px/1.3 "Courier New", Courier, monospace; padding: 5px 7px; background: rgba(255,255,255,.43); }
+  .note-link, .note-status { font: 700 11px/1.35 "Courier New", Courier, monospace; color: var(--black); text-decoration: none; }
+  .note-link { border-bottom: 2px solid var(--black); }
+  .note-link:hover { opacity: .65; }
+  .note-status { opacity: .62; }
+  @media (max-width: 1180px) { .project-note:nth-child(n) { margin-top: 0; } }
+  @media (max-width: 760px) { .project-note { min-height: 360px; } }
+  @media (prefers-reduced-motion: reduce) { .project-note { transition: none; } }
+</style>

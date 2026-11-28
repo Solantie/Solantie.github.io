@@ -15,7 +15,7 @@ const translations = {
     intro: "Education, professional experience, and academic work.",
     education: "EDUCATION", professional: "WORK EXPERIENCE",
     academic: "RESEARCH & TEACHING", awards: "AWARDS",
-    present: "Present", institutionPlaceholder: "[University name — add later]",
+    present: "Present", institutionPlaceholder: "[University of Stuttgart]",
     entries: {
       masterCL: ["M.Sc. Computational Linguistics", "Focus: speech processing, NLP, deep learning", "Relevant courses: Deep Learning, Reinforcement Learning, Information Retrieval & Text Mining"],
       masterGerman: ["M.A. German Language and Literature", "Thesis: Metadiscourse in MOOCs — An Analysis of Teacher Discourse in Online German Courses", "Multimodal qualitative analysis of instructional discourse"],
@@ -41,7 +41,7 @@ const translations = {
     intro: "Ausbildung, Berufserfahrung und wissenschaftliche Tätigkeiten.",
     education: "AUSBILDUNG", professional: "BERUFSERFAHRUNG",
     academic: "FORSCHUNG & LEHRE", awards: "AUSZEICHNUNGEN",
-    present: "heute", institutionPlaceholder: "[Universitätsname später ergänzen]",
+    present: "heute", institutionPlaceholder: "[Universität Stuttgart]",
     entries: {
       masterCL: ["M.Sc. Computational Linguistics", "Schwerpunkte: Sprachverarbeitung, NLP und Deep Learning", "Relevante Lehrveranstaltungen: Deep Learning, Reinforcement Learning, Information Retrieval & Text Mining"],
       masterGerman: ["M.A. German Language and Literature", "Masterarbeit: Metadiskurs in MOOCs – eine Analyse der Lehrendensprache in Online-Deutschkursen", "Multimodale qualitative Analyse von Lehrdiskursen"],
@@ -91,7 +91,7 @@ const translations = {
 const t = translations[locale];
 const e = t.entries;
 const education = [
-  { date: `10/2025 – ${t.present}`, school: t.institutionPlaceholder, items: e.masterCL },
+  { date: `10/2025 – ${t.present}`, school: t.University of Stuttgart, items: e.masterCL },
   { date: "09/2020 – 06/2023", school: t.institutionPlaceholder, items: e.masterGerman },
   { date: "10/2021 – 05/2023", school: t.institutionPlaceholder, items: e.masterDaF },
   { date: "09/2016 – 06/2020", school: t.institutionPlaceholder, items: e.bachelor }
